@@ -1,16 +1,17 @@
+from typing import Optional
+
+import dsp
 import dspy
-from signature_translator import SignatureTranslator
 from dspy.teleprompt.mipro_optmizer import (
     BasicGenerateInstruction,
     BasicGenerateInstructionWithDataObservations,
     BasicGenerateInstructionWithExamples,
     BasicGenerateInstructionWithExamplesAndDataObservations,
-    ObservationSummarizer,
     DatasetDescriptor,
     DatasetDescriptorWithPriorObservations,
+    ObservationSummarizer,
 )
-from typing import Optional
-import dsp
+from signature_translator import SignatureTranslator
 
 
 class MIPROTranslated(MIPRO):
@@ -28,13 +29,11 @@ class MIPROTranslated(MIPRO):
         track_stats=True,
         view_data_batch_size=10,
     ):
-        translator = SignatureTranslator(language)
+        translator = SignatureTranslator(language, lm=translator_lm)
         translator.translate_signature(BasicGenerateInstruction)
         translator.translate_signature(BasicGenerateInstructionWithDataObservations)
         translator.translate_signature(BasicGenerateInstructionWithExamples)
-        translator.translate_signature(
-            BasicGenerateInstructionWithExamplesAndDataObservations
-        )
+        translator.translate_signature(BasicGenerateInstructionWithExamplesAndDataObservations)
         translator.translate_signature(ObservationSummarizer)
         translator.translate_signature(DatasetDescriptor)
         translator.translate_signature(DatasetDescriptorWithPriorObservations)
